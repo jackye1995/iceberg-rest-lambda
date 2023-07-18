@@ -15,15 +15,11 @@ import org.apache.iceberg.aws.lambda.rest.LambdaRESTRequestParser;
 import org.apache.iceberg.aws.lambda.rest.LambdaRESTResponse;
 import org.apache.iceberg.aws.lambda.rest.LambdaRESTResponseParser;
 import org.apache.iceberg.exceptions.RESTException;
-import org.apache.iceberg.io.IOUtil;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
 
 public class LambdaRESTHandler implements RequestStreamHandler {
 
@@ -32,11 +28,6 @@ public class LambdaRESTHandler implements RequestStreamHandler {
             InputStream input,
             OutputStream output,
             Context context) throws IOException {
-//        String data = new BufferedReader(
-//                new InputStreamReader(input, StandardCharsets.UTF_8))
-//                .lines()
-//                .collect(Collectors.joining(""));
-//        context.getLogger().log("Received data: " + data);
         LambdaRESTRequest lambdaRequest = LambdaRESTRequestParser.fromJsonStream(input);
         context.getLogger().log("Received request: " + LambdaRESTRequestParser.toJson(lambdaRequest, true));
         HttpUriRequestBase httpRequest = new HttpUriRequestBase(lambdaRequest.method(), lambdaRequest.uri());
