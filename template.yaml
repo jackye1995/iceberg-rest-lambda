@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Example function to handle REST request from IcebergLambdaInvoker
+
+Resources:
+  LambdaRESTHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: iceberg-rest-lambda-handler
+      CodeUri: './build/libs/iceberg-rest-lambda-all.jar'
+      Handler: org.apache.iceberg.aws.lambda.LambdaRESTHandler::handleRequest
+      Runtime: java11
+      Architectures:
+        - x86_64
+      MemorySize: 1024
+      Timeout: 300
+      Policies:
+        - Statement:
+            - Action:
+                - s3:*
+              Effect: Allow
+              Resource: '*'
+          Version: '2012-10-17'
